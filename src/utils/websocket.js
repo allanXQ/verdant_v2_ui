@@ -6,7 +6,7 @@ const createWebSocket = (maxRetries = 3, retryInterval = 2000) => {
   let shouldRetry = true;
 
   const connect = () => {
-    socket = io("http://localhost:2000", {
+    socket = io("https://verdantwss.onrender.com", {
       withCredentials: true,
     });
     socket.on("connect_error", (error) => {
