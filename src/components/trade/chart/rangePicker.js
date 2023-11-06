@@ -126,7 +126,7 @@ const RangePicker = ({ formWidth }) => {
     try {
       const response = await axiosInstance({
         method: "POST",
-        url: "http://localhost:5000/api/v1/app/ticker-data",
+        url: `${process.env.REACT_APP_SERVER_URL}/api/v1/app/ticker-data`,
         data: {
           assetName: activeAsset,
         },

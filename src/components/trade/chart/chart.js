@@ -28,7 +28,7 @@ const CandleStickChart = ({ formWidth }) => {
     try {
       const response = await axiosInstance({
         method: "POST",
-        url: "http://localhost:5000/api/v1/app/historical-klines",
+        url: `${process.env.REACT_APP_SERVER_URL}/api/v1/app/historical-klines`,
         data: {
           assetName,
           klineInterval,
