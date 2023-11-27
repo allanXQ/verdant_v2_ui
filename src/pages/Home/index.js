@@ -1,5 +1,6 @@
 import { Box, Grid, Typography, Button, useTheme } from "@mui/material";
 import { MuiButton } from "components/common/Button";
+import Footer from "./Footer";
 
 const Features = [
   {
@@ -80,7 +81,7 @@ const Home = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        gap: theme.spacing(5),
+        gap: theme.spacing(10),
       }}
     >
       <Grid
