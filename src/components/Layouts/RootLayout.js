@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import ResponsiveDrawer from "../Navigation/Navbar";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsLoggedIn, selectUser } from "redux/features/user/userSlice";
 import { selectDrawerWidth } from "redux/features/app/configSlice";
@@ -11,6 +11,7 @@ const RootLayout = () => {
   let drawerWidth = useSelector(selectDrawerWidth);
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
   const isTrade = path.includes("trade/spot");
@@ -19,28 +20,28 @@ const RootLayout = () => {
   const excludedPaths = ["trade", "transact"];
   const currentPath = useLocation().pathname;
   useEffect(() => {
-    if (excludedPaths.some((path) => currentPath.includes(path))) return;
+    if (isLoggedIn) {
+      if (excludedPaths.some((path) => currentPath.includes(path))) return;
 
-    dispatch(
-      apiCall({
-        endpoint: "user/user-info",
-        method: "post",
-        data: {
-          userId: user.userId,
-        },
-        slice: "userData",
-      })
-    );
-  }, [currentPath]);
+      dispatch(
+        apiCall({
+          endpoint: "user/user-info",
+          method: "post",
+          data: {
+            userId: user.userId,
+          },
+          slice: "userData",
+        })
+      );
+    } else {
+      navigate("login");
+    }
+  }, [currentPath, isLoggedIn]);
 
   return (
-    <>
-      {isLoggedIn && (
-        <ResponsiveDrawer>
-          <Outlet />
-        </ResponsiveDrawer>
-      )}
-    </>
+    <ResponsiveDrawer>
+      <Outlet />
+    </ResponsiveDrawer>
   );
 };
 
