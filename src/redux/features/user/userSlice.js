@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoggedIn: false,
-  isRegistered: false,
   status: "idle",
   error: null,
   userId: null,
@@ -60,19 +59,10 @@ export const userSlice = createSlice({
         (state, action) => {
           state.status = "succeeded";
           switch (action.meta.arg.endpoint) {
-            case "auth/register":
-              state.isRegistered = true;
-              break;
-            case "auth/login":
-              state.isLoggedIn = true;
-              state.user = action.payload.data;
-              break;
-            case "auth/logout":
-              state.isLoggedIn = false;
-              state.user = initialState.user;
-              break;
             case "user/user-info":
-              state.user = action.payload.data.user;
+              Object.keys(action.payload.data.user).forEach((key) => {
+                state[key] = action.payload.data.user[key];
+              });
               break;
             //to be updated
             case "user/transact/withdraw":
