@@ -5,51 +5,46 @@ const initialState = {
   isRegistered: false,
   status: "idle",
   error: null,
-  user: {
-    userId: null,
-    username: null,
-    googleName: null,
-    firstName: null,
-    lastName: null,
-    image: null,
-    email: null,
-    phone: null,
-    balance: 0,
-    portfolio: [],
-    trades: [],
-    deposits: [],
-    withdrawals: [],
-    transfers: [],
-    spotOrders: [],
-    p2pOrders: [],
-    loanRequests: [],
-    loanRepayments: [],
-    swapOrders: [],
-    referrals: [],
-  },
+  userId: null,
+  username: null,
+  googleName: null,
+  firstName: null,
+  lastName: null,
+  image: null,
+  email: null,
+  phone: null,
+  balance: 0,
+  portfolio: [],
+  trades: [],
+  deposits: [],
+  withdrawals: [],
+  transfers: [],
+  spotOrders: [],
+  p2pOrders: [],
+  loanRequests: [],
+  loanRepayments: [],
+  swapOrders: [],
+  referrals: [],
 };
-
 export const userSlice = createSlice({
   name: "userData",
   initialState,
   reducers: {
     loginSuccess(state, action) {
       state.isLoggedIn = true;
-      state.user = action.payload;
+      Object.assign(state, action.payload);
     },
     loginFailed(state, action) {
       state.isLoggedIn = false;
       state.error = action.payload.error;
     },
     logout(state) {
-      state.isLoggedIn = false;
-      state.user = initialState.user;
+      Object.assign(state, initialState);
     },
     updateUser(state, action) {
-      state.user = {
-        ...state.user,
-        ...action.payload,
-      };
+      Object.keys(action.payload).forEach((key) => {
+        state[key] = action.payload[key];
+      });
     },
   },
   extraReducers: (builder) => {
@@ -63,7 +58,6 @@ export const userSlice = createSlice({
       .addMatcher(
         (action) => action.type.startsWith("api/call/fulfilled"),
         (state, action) => {
-          if (action.payload.slice !== "userData") return;
           state.status = "succeeded";
           switch (action.meta.arg.endpoint) {
             case "auth/register":
@@ -96,7 +90,6 @@ export const userSlice = createSlice({
       .addMatcher(
         (action) => action.type.startsWith("api/call/rejected"),
         (state, action) => {
-          if (action.payload.slice !== "userData") return;
           state.status = "failed";
           state.error = action.error.message;
         }
@@ -104,7 +97,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const selectUser = (state) => state.user.user;
+export const selectUser = (state) => state.user;
 export const selectIsLoggedIn = (state) => state.user.isLoggedIn;
 export const selectIsRegistered = (state) => state.user.isRegistered;
 export const selectUserStatus = (state) => state.user.status;
