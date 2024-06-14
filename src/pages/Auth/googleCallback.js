@@ -22,34 +22,14 @@ const GoogleCallback = () => {
     dispatch(loginFailed({ error: "No user ID" }));
     navigate("/login");
   }
+  const userPayload = {
+    ...userData,
+    userId,
+  };
+  console.log(userPayload);
 
-  const userError = useSelector(selectUserError);
-
-  useEffect(() => {
-    if (userStatus === "idle") {
-      dispatch(
-        apiCall({
-          endpoint: "user/user-info",
-          method: "post",
-          data: {
-            google: "google",
-            userId,
-          },
-          slice: "userData",
-        })
-      );
-    }
-
-    if (userStatus === "succeeded" && userData.userId) {
-      dispatch(loginSuccess({ user: userData }));
-      navigate("/dashboard");
-    } else if (userStatus === "failed" && userError) {
-      dispatch(loginFailed({ error: userError }));
-      navigate(`/login?error=${encodeURIComponent(userError)}`);
-    }
-  }, [userStatus, userError, navigate]);
-
-  return <div>Processing...</div>;
+  dispatch(loginSuccess(userPayload));
+  return navigate("/dashboard");
 };
 
 export default GoogleCallback;
