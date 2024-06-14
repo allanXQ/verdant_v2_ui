@@ -193,7 +193,7 @@ function ResponsiveDrawer(props) {
                 {item.icon}
               </ListItemIcon>
               <ListItemText>
-                <Typography variant="bodyRegular">{item.name}</Typography>
+                <Typography variant="bodySmall">{item.name}</Typography>
               </ListItemText>
               {item.submenu ? (
                 openSubMenu === index ? (
@@ -207,7 +207,7 @@ function ResponsiveDrawer(props) {
               <Collapse in={openSubMenu === index} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   {item.submenu.map((subitem, subindex) => (
-                    <ListItem key={subindex} disablePadding>
+                    <ListItem key={subindex} disablePadding sx={{ px: 3 }}>
                       <ListItemButton component={Link} to={subitem.path}>
                         <ListItemIcon
                           sx={{
@@ -216,7 +216,7 @@ function ResponsiveDrawer(props) {
                         >
                           {subitem.icon}
                         </ListItemIcon>
-                        <Typography variant="bodyRegular">
+                        <Typography variant="bodySmall">
                           {subitem.name}
                         </Typography>
                       </ListItemButton>
